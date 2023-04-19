@@ -6,38 +6,14 @@ namespace JogoDaVelha
     {
         static void ImprimeTabela(string[,] tabela)
         {
-            // Imprime a numeração das colunas
-            Console.Write("  ");
-            for (int j = 0; j < tabela.GetLength(1); j++)
-            {
-                Console.Write($" {j + 1} ");
-            }
-            Console.WriteLine();
-
-            // Imprime a numeração das linhas
-            for (int i = 0; i < tabela.GetLength(0); i++)
-            {
-                Console.Write($"{i + 1} ");
-                for (int j = 0; j < tabela.GetLength(1); j++)
-                {
-                    Console.Write($" {tabela[i, j]} ");
-                }
-                Console.WriteLine();
-
-                if (i < tabela.GetLength(0) - 1)
-                {
-                    for (int j = 0; j < tabela.GetLength(1); j++)
-                    {
-                        Console.Write("---");
-                        // Verifica se o elemento é o ultimo da coluna
-                        if (j < tabela.GetLength(1) - 1)
-                        {
-                            Console.Write("|");
-                        }
-                    }
-                    Console.WriteLine();
-                }
-            }
+            Console.WriteLine("     1   2   3  ");
+            Console.WriteLine("   ");
+            Console.WriteLine($" 1  {tabela[0, 0]} | {tabela[0, 1]} | {tabela[0, 2]}");
+            Console.WriteLine("   -----------");
+            Console.WriteLine($" 2  {tabela[1, 0]} | {tabela[1, 1]} | {tabela[1, 2]}");
+            Console.WriteLine("   -----------");
+            Console.WriteLine($" 3  {tabela[2, 0]} | {tabela[2, 1]} | {tabela[2, 2]}");
+            Console.WriteLine("   ");
         }
 
         static bool VerificaVencedor(string[,] tabela, string jogador)
