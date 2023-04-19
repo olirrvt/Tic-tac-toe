@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace JogoDaVelha
 {
@@ -6,7 +8,7 @@ namespace JogoDaVelha
     {
         static void ImprimeTabela(string[,] tabela)
         {
-            Console.WriteLine("     1   2   3  ");
+            Console.WriteLine("    1   2   3  ");
             Console.WriteLine("   ");
             Console.WriteLine($" 1  {tabela[0, 0]} | {tabela[0, 1]} | {tabela[0, 2]}");
             Console.WriteLine("   -----------");
@@ -14,6 +16,34 @@ namespace JogoDaVelha
             Console.WriteLine("   -----------");
             Console.WriteLine($" 3  {tabela[2, 0]} | {tabela[2, 1]} | {tabela[2, 2]}");
             Console.WriteLine("   ");
+        }
+
+        static void mudaCor(string cor)
+        {
+            switch(cor)
+            {
+                // Azul
+                // Vermelho
+                // Verde
+                // Roxo
+
+                case "azul":
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                break;
+                
+                case "vermelho":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                break; 
+                
+                case "verde":
+                    Console.ForegroundColor = ConsoleColor.Green;
+                break;
+                
+                case "roxo":
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                break;
+
+            }
         }
 
         static bool VerificaVencedor(string[,] tabela, string jogador)
@@ -89,14 +119,70 @@ namespace JogoDaVelha
             return false;
         }
 
-        static void Main(string[] args)
+        static void PvP()
         {
             string[,] tabela = new string[3, 3];
             string opcao;
-            string jogadorAtual = "X";
+            string player1;
+            string player2;
+            string jogadorAtual;
+            string corUsuario1;
+            string corUsuario2;
             bool jogadaValida;
             bool jogarNovamente = true;
             int linha, coluna;
+
+            Console.Clear();
+
+            // Identificando o Player 1
+
+            Console.WriteLine("Qual é o nome do Player 1?");
+            player1 = Console.ReadLine();
+
+            Console.Clear();
+
+            Console.WriteLine("Escolha sua cor:");
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Azul");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Vermelho");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Verde");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("Roxo");
+            Console.ResetColor();
+
+            corUsuario1 = Console.ReadLine().ToLower();
+
+            Console.Clear();
+
+            // Identificando o Player 2
+            
+            Console.WriteLine("Qual é o nome do Player 2?");
+            player2 = Console.ReadLine();
+
+            Console.Clear();
+
+            Console.WriteLine("Escolha sua cor:");
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Azul");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Vermelho");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Verde");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("Roxo");
+            Console.ResetColor();
+
+            corUsuario2 = Console.ReadLine().ToLower();
+
+            Console.Clear();
+
+            // Identificando o jogador
+
+            jogadorAtual = player1;
 
             do
             {
@@ -119,7 +205,19 @@ namespace JogoDaVelha
 
                     // Mostra o próximo jogador
 
-                    Console.WriteLine($"Jogador atual: {jogadorAtual}");
+                    Console.Write($"Jogador atual: ");
+
+                    if ( jogadorAtual == player1)
+                    {
+                        mudaCor(corUsuario1);
+                    }
+                    else
+                    {
+                        mudaCor(corUsuario2);
+                    }
+
+                    Console.WriteLine(jogadorAtual);
+                    Console.ResetColor();
 
                     // Pede as coordenadas da jogada e verifica se é válida
 
@@ -147,7 +245,7 @@ namespace JogoDaVelha
 
                     // Realiza a jogada
 
-                    tabela[linha, coluna] = jogadorAtual;
+                    tabela[linha, coluna] = jogadorAtual == player1 ? "X" : "O";
 
                     // Verifica se houve um vencedor
 
@@ -188,7 +286,8 @@ namespace JogoDaVelha
                     }
 
                     // Troca o jogador atual verificando se ele já jogou
-                    jogadorAtual = jogadorAtual == "X" ? "O" : "X";
+
+                    jogadorAtual = jogadorAtual == player1 ? player2 : player1;
                 }
 
                 // Pergunta ao usuário se ele quer jogar novamente
@@ -198,6 +297,55 @@ namespace JogoDaVelha
                 jogarNovamente = opcao == "N" ? false : true;
 
             } while (jogarNovamente);
+        }
+
+        static void PvC()
+        {
+
+        }
+
+        static void Main(string[] args)
+        {
+            int opMenu;
+
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(" C#: BEM VINDO AO GAME! ");
+            Console.WriteLine(" ");
+          
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.WriteLine(" 1- Player vs Player ");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine(" 2- Player vs Computer ");
+            Console.ResetColor();
+            
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine(" 3- Exit");
+            Console.ResetColor();
+
+            Console.WriteLine(" ");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(" Escolha uma das opções acima para começar! ");
+            Console.ResetColor();
+            Console.WriteLine(" ");
+
+            opMenu = int.Parse(Console.ReadLine());
+
+            switch(opMenu) 
+            {
+                case 1:
+                    PvP();
+                break;
+
+                case 2:
+                    PvC();
+                break;
+
+                case 3:
+                    System.Environment.Exit(0);
+                break;
+            }
         }
     }
 }
