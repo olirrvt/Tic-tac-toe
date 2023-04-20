@@ -46,15 +46,17 @@ namespace JogoDaVelha
             }
         }
 
-        static bool VerificaVencedor(string[,] tabela, string jogador)
+        static bool VerificaVencedor(string[,] tabela, string jogadorAtual, string player1)
         {
+            jogadorAtual = jogadorAtual == player1 ? "X" : "Y";
+
             // Verifica as linhas
             for (int i = 0; i < tabela.GetLength(0); i++)
             {
                 bool linhaCompleta = true;
                 for (int j = 0; j < tabela.GetLength(1); j++)
                 {
-                    if (tabela[i, j] != jogador)
+                    if (tabela[i, j] != jogadorAtual)
                     {
                         linhaCompleta = false;
                         break;
@@ -72,7 +74,7 @@ namespace JogoDaVelha
                 bool colunaCompleta = true;
                 for (int i = 0; i < tabela.GetLength(0); i++)
                 {
-                    if (tabela[i, j] != jogador)
+                    if (tabela[i, j] != jogadorAtual)
                     {
                         colunaCompleta = false;
                         break;
@@ -89,7 +91,7 @@ namespace JogoDaVelha
             bool diagonalCompleta1 = true;
             for (int i = 0; i < tabela.GetLength(0); i++)
             {
-                if (tabela[i, i] != jogador)
+                if (tabela[i, i] != jogadorAtual)
                 {
                     diagonalCompleta1 = false;
                     break;
@@ -105,7 +107,7 @@ namespace JogoDaVelha
             bool diagonalCompleta2 = true;
             for (int i = 0; i < tabela.GetLength(0); i++)
             {
-                if (tabela[i, tabela.GetLength(0) - i - 1] != jogador)
+                if (tabela[i, tabela.GetLength(0) - i - 1] != jogadorAtual)
                 {
                     diagonalCompleta2 = false;
                     break;
@@ -123,9 +125,9 @@ namespace JogoDaVelha
         {
             string[,] tabela = new string[3, 3];
             string opcao;
+            string jogadorAtual;
             string player1;
             string player2;
-            string jogadorAtual;
             string corUsuario1;
             string corUsuario2;
             bool jogadaValida;
@@ -249,7 +251,7 @@ namespace JogoDaVelha
 
                     // Verifica se houve um vencedor
 
-                    if (VerificaVencedor(tabela, jogadorAtual))
+                    if (VerificaVencedor(tabela, jogadorAtual, player1))
                     {
                         Console.Clear();
                         ImprimeTabela(tabela);
