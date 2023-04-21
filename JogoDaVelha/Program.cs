@@ -48,7 +48,9 @@ namespace JogoDaVelha
 
         static bool VerificaVencedor(string[,] tabela, string jogadorAtual, string player1)
         {
-            jogadorAtual = jogadorAtual == player1 ? "X" : "Y";
+            string verificaJogador;
+
+            verificaJogador = jogadorAtual == player1 ? "X" : "O";
 
             // Verifica as linhas
             for (int i = 0; i < tabela.GetLength(0); i++)
@@ -56,7 +58,7 @@ namespace JogoDaVelha
                 bool linhaCompleta = true;
                 for (int j = 0; j < tabela.GetLength(1); j++)
                 {
-                    if (tabela[i, j] != jogadorAtual)
+                    if (tabela[i, j] != verificaJogador)
                     {
                         linhaCompleta = false;
                         break;
@@ -74,7 +76,7 @@ namespace JogoDaVelha
                 bool colunaCompleta = true;
                 for (int i = 0; i < tabela.GetLength(0); i++)
                 {
-                    if (tabela[i, j] != jogadorAtual)
+                    if (tabela[i, j] != verificaJogador)
                     {
                         colunaCompleta = false;
                         break;
@@ -86,34 +88,21 @@ namespace JogoDaVelha
                 }
             }
 
-            // Verifica a diagonal principal
-
+            // Verifica as diagonais
             bool diagonalCompleta1 = true;
-            for (int i = 0; i < tabela.GetLength(0); i++)
-            {
-                if (tabela[i, i] != jogadorAtual)
-                {
-                    diagonalCompleta1 = false;
-                    break;
-                }
-            }
-            if (diagonalCompleta1)
-            {
-                return true;
-            }
-
-            // Verifica a diagonal secundária
-
             bool diagonalCompleta2 = true;
             for (int i = 0; i < tabela.GetLength(0); i++)
             {
-                if (tabela[i, tabela.GetLength(0) - i - 1] != jogadorAtual)
+                if (tabela[i, i] != verificaJogador)
+                {
+                    diagonalCompleta1 = false;
+                }
+                if (tabela[i, tabela.GetLength(0) - i - 1] != verificaJogador)
                 {
                     diagonalCompleta2 = false;
-                    break;
                 }
             }
-            if (diagonalCompleta2)
+            if (diagonalCompleta1 || diagonalCompleta2)
             {
                 return true;
             }
@@ -160,9 +149,26 @@ namespace JogoDaVelha
             Console.Clear();
 
             // Identificando o Player 2
-            
+
             Console.WriteLine("Qual é o nome do Player 2?");
             player2 = Console.ReadLine();
+
+            if (player2 == player1)
+            {
+                bool nomeValido = false;
+
+                do
+                {   
+                  Console.WriteLine("O nome não pode ser igual ao do Player 1, tente outro!");
+                  player2 = Console.ReadLine();
+
+                  if(player2 != player1)
+                  {
+                     nomeValido = true;
+                  }
+
+                } while (!nomeValido);
+            }
 
             Console.Clear();
 
@@ -255,7 +261,20 @@ namespace JogoDaVelha
                     {
                         Console.Clear();
                         ImprimeTabela(tabela);
+
+                        // Verifica a cor do usuário
+
+                        if(jogadorAtual == player1)
+                        {
+                            mudaCor(corUsuario1);
+                        }
+                        else
+                        {
+                            mudaCor(corUsuario2);
+                        }
+
                         Console.WriteLine($"O jogador {jogadorAtual} venceu!");
+                        Console.ResetColor();
                         break;
                     }
 
