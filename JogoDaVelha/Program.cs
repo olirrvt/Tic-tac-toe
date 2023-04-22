@@ -32,7 +32,7 @@ namespace JogoDaVelha
                 break;
                 
                 case "vermelho":
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                 break; 
                 
                 case "verde":
@@ -153,13 +153,15 @@ namespace JogoDaVelha
             Console.WriteLine("Qual é o nome do Player 2?");
             player2 = Console.ReadLine();
 
+            // Verificando se os nomes não são iguais
+
             if (player2 == player1)
             {
                 bool nomeValido = false;
 
                 do
                 {   
-                  Console.WriteLine("O nome não pode ser igual ao do Player 1, tente outro!");
+                  Console.WriteLine("O nome não pode ser igual ao do Player 1, digite outro!");
                   player2 = Console.ReadLine();
 
                   if(player2 != player1)
@@ -320,9 +322,256 @@ namespace JogoDaVelha
             } while (jogarNovamente);
         }
 
-        static void PvC()
+        static void PvcFacil()
+        {
+            string[,] tabela = new string[3, 3];
+            string opcao;
+            string jogadorAtual;
+            string player;
+            string corUsuario;
+            string computador = "Wall-E";
+            bool jogarNovamente = false;
+            bool jogadaValida;
+            int linha, coluna;
+
+            Console.Clear();
+
+            // Indetificando o Jogador
+
+            Console.WriteLine("Qual é o nome do Player?");
+            player = Console.ReadLine();
+
+            Console.Clear();
+
+            // Cor do Jogador
+
+            Console.WriteLine("Escolha a sua cor:");
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Azul");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("Vermelho");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Verde");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("Roxo");
+            Console.ResetColor();
+
+            corUsuario = Console.ReadLine().ToLower();
+
+            Console.Clear();
+
+            jogadorAtual = player;
+
+            do
+            {
+                // Limpa a tabela
+                for (int i = 0; i < tabela.GetLength(0); i++)
+                {
+                    for(int j = 0; j < tabela.GetLength(1); j++)
+                    {
+                        tabela[i, j] = " ";
+                    }
+                }
+
+                while (true)
+                {
+                    Console.Clear();
+                    ImprimeTabela(tabela);
+
+                    // Mostra de quem é a vez de jogar e verifica se não é o robô
+
+                    Console.Write("Jogador atual: ");
+
+                    if(jogadorAtual == player)
+                    {
+                        mudaCor(corUsuario);
+                    }
+                    else
+                    {
+                        mudaCor("vermelho");
+                    }
+
+                    Console.WriteLine(jogadorAtual);
+                    Console.ResetColor();
+
+                    // Verificando se é a vez do Player
+
+                    if(jogadorAtual == player)
+                    {
+                        // Pedindo as coordenadas e verificando se são válidas
+
+                        do 
+                        {
+                            jogadaValida = true;
+
+                            Console.Write("Digite a linha: ");
+                            linha = int.Parse(Console.ReadLine()) - 1;
+                            Console.Write("Digite a Coluna: ");
+                            coluna = int.Parse(Console.ReadLine()) - 1;
+
+                            // Se as coordenadas não existir volta o loop
+                            if (linha < 0 || linha >= tabela.GetLength(0) || coluna < 0 || coluna >= tabela.GetLength(1))
+                            {
+                                Console.WriteLine("Coordenadas inválidas! Tente novamente.");
+                                jogadaValida = false;
+                            }
+                            // Se as coordenadas tiverem marcadas volta o loop
+                            else if (tabela[linha, coluna] != " ")
+                            {
+                                Console.WriteLine("Esta posição já está ocupada! Tente novamente.");
+                                jogadaValida = false;
+                            }
+                         
+
+                        } while (!jogadaValida);
+
+                        // Realiza a jogada
+                         tabela[linha, coluna] = "X";
+                    }
+                    else
+                    {
+                        // Jogada do Computador
+
+                        Random random = new Random();
+
+                        do
+                        {
+                            jogadaValida = true;
+
+                            int randomLinha = random.Next(0,3);
+                            int randomColuna = random.Next(0,3);
+
+                            linha = randomLinha;
+                            coluna = randomColuna;
+
+                            if(linha < 0 || linha >= tabela.GetLength(0) || coluna < 0 || coluna >= tabela.GetLength(1))
+                            {
+                                jogadaValida = false;
+                            }
+                            else if (tabela[linha, coluna] != " ")
+                            {
+                                jogadaValida = false;
+                            }
+
+                        } while (!jogadaValida);
+
+                        // Realiza jogada do robô
+                        tabela[linha, coluna] = "O";
+                    }
+
+                    // Verifica se teve um vencedor
+
+                    if(VerificaVencedor(tabela, jogadorAtual, player))
+                    {
+                        Console.Clear();
+                        ImprimeTabela(tabela);
+
+                        if(jogadorAtual == player)
+                        {
+                            mudaCor(corUsuario);
+                        }
+                        else
+                        {
+                            mudaCor("vermelho");
+                        }
+
+                        Console.WriteLine($"O jogador {jogadorAtual} venceu!");
+                        Console.ResetColor();
+                        break;
+                    }
+
+                    // Verificação de empate
+
+                    bool empate = true;
+
+                    for (int i = 0; i < tabela.GetLength(0); i++)
+                    {
+                        for(int j = 0; j < tabela.GetLength(1); j++)
+                        {
+                            if (tabela[i,j] == " ")
+                            {
+                                empate = false;
+                                break;
+                            }
+                        }
+
+                        if(!empate)
+                        {
+                            break;
+                        }
+                    }
+
+                    if(empate)
+                    {
+                        Console.Clear();
+                        ImprimeTabela(tabela);
+                        Console.WriteLine("O jogo terminou em empate");
+                        break;
+                    }
+
+                    // Troca de vez
+
+                    jogadorAtual = jogadorAtual == player ? computador : player;
+
+                }
+
+                // Perguntar se o usuário deseja jogar novamente
+            
+                Console.WriteLine("Deseja jogar novamente?");
+                opcao = Console.ReadLine().ToUpper();
+
+                jogarNovamente = opcao == "N" ? false : true;
+
+            } while (jogarNovamente);
+
+        }
+
+        static void PvcDificil()
         {
 
+        }
+
+        static void PvCmenu()
+        {
+            string[,] tabela = new string[3, 3];
+            string jogadorAtual;
+            string player;
+
+            int opMenu;
+
+            Console.Clear();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(" 1- Nível Fácil ");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine(" 2- Nível Difícil");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(" 3- Jogar Player vs Player");
+            Console.ResetColor();
+
+            Console.WriteLine(" ");
+
+            opMenu = int.Parse(Console.ReadLine());
+
+            switch (opMenu)
+            {
+                case 1:
+                    PvcFacil();
+                    break;
+
+                case 2:
+                    PvcDificil();
+                    break;
+
+                case 3:
+                    PvP();
+                    break;
+            }
         }
 
         static void Main(string[] args)
@@ -360,7 +609,7 @@ namespace JogoDaVelha
                 break;
 
                 case 2:
-                    PvC();
+                    PvCmenu();
                 break;
 
                 case 3:
